@@ -8,6 +8,13 @@
 import UIKit
 
 class ViewController: UIViewController {
+    lazy var game = MemoryGame(NumOfBtnPairs: BtnList.count / 2)
+    
+    var ClickCounter = 0 {
+        didSet {
+            pairCounter.text = "\(ClickCounter)"
+        }
+    }
     @IBOutlet var BtnList: [UIButton]!
     
     @IBOutlet weak var pairCounter: UILabel!
@@ -34,8 +41,14 @@ class ViewController: UIViewController {
         }
     }
     
-    @IBAction func btn(_ sender: UIButton) {
-        ClickBtn(sign: "r", on: sender)
+    @IBAction func clickBtn(_ sender: UIButton) {
+        ClickCounter += 1
+        if let btnNumber = BtnList.firstIndex(of: sender) {
+            game.chooseBtn(at: btnNumber)
+            updateViewFromModel()
+        } else {
+            print("Error: Button not found")
+        }
     }
     
     @IBAction func reset(_ sender: UIButton) {
@@ -49,29 +62,16 @@ class ViewController: UIViewController {
             pairCount = 0
     }
     
-    
-    func ClickBtn(sign signin: String, on button: UIButton) {
-        let btnIndex = BtnList.firstIndex(of: button)!
-        flippedBtns.append(btnIndex)
-
-        if button.backgroundColor == UIColor.systemGray5 {
-            button.backgroundColor = button.tintColor
-            if !isFlipped {
-                isFlipped = true
-                prevColour = button.tintColor
-            } else if isFlipped {
-                currColour = button.tintColor
-                if prevColour == currColour {
-                    pairCount += 1
-                } else {
-                    for btn in flippedBtns {
-                        BtnList[btn].backgroundColor = UIColor.systemGray5
-                    }
-                }
-                isFlipped = false
-                flippedBtns.removeAll()
+   func updateViewFromModel() {
+        for index in BtnList.indices {
+            let button = BtnList[index]
+            let btn = game.buttons[index]
+            if !btn.isBtnWhite {
+                print("Not white")
+            } else {
+                print("White")
             }
-        }
+       }
     }
     
 }
