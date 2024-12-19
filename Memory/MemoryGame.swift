@@ -11,11 +11,10 @@ class MemoryGame {
     var buttons = [Btn]()
     
     func chooseBtn(at index: Int) {
-        if buttons[index].isBtnWhite {
-            buttons[index].isBtnWhite = false
-        } else {
-            buttons[index].isBtnWhite = true
-        }
+        guard !buttons[index].isBtnSameColor else { return }
+        guard !buttons[index].isFlipped else { return }
+        
+        buttons[index].isBtnWhite.toggle()
     }
     
     init(NumOfBtnPairs: Int) {
@@ -23,5 +22,6 @@ class MemoryGame {
             let btn = Btn(BtnID: BtnID)
             buttons += [btn, btn]
         }
+        buttons.shuffle()
     }
 }

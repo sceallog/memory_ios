@@ -10,6 +10,7 @@ import Foundation
 struct Btn {
     var isBtnWhite = true
     var isBtnSameColor = false
+    var isFlipped = false
     var BtnID: Int
     
     // button identifier
