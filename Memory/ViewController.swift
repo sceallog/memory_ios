@@ -33,12 +33,8 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        shuffleBtnColours()
         
-        let shuffledColours = colours.shuffled()
-
-        for (index, button) in BtnList.enumerated() {
-            button.tintColor = shuffledColours[index]
-        }
     }
     
     @IBAction func clickBtn(_ sender: UIButton) {
@@ -87,8 +83,17 @@ class ViewController: UIViewController {
         isFlipped = false
         flippedBtns.removeAll()
         pairCount = 0
+        shuffleBtnColours()
         updateViewFromModel()
             
+    }
+   
+    func shuffleBtnColours() {
+        let shuffledColours = colours.shuffled()
+
+        for (index, button) in BtnList.enumerated() {
+            button.tintColor = shuffledColours[index]
+        }
     }
     
    func updateViewFromModel() {
