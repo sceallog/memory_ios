@@ -11,10 +11,10 @@ class MemoryGame {
     var buttons = [Btn]()
     
     func chooseBtn(at index: Int) {
-        guard !buttons[index].isBtnSameColor else { return }
+        guard !buttons[index].hasBtnSameString else { return }
         guard !buttons[index].isFlipped else { return }
         
-        buttons[index].isBtnWhite.toggle()
+        buttons[index].toggleFlip()
     }
     
     init(NumOfBtnPairs: Int) {

@@ -8,8 +8,7 @@
 import Foundation
 
 struct Btn {
-    var isBtnWhite = true
-    var isBtnSameColor = false
+    var hasBtnSameString = false
     var isFlipped = false
     var BtnID: Int
     
@@ -19,6 +18,10 @@ struct Btn {
     static func getUniqueID() -> Int {
         IDfactory += 1
         return IDfactory
+    }
+    
+    mutating func toggleFlip() {
+        isFlipped.toggle()
     }
     
     init(BtnID: Int) {

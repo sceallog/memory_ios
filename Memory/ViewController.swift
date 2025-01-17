@@ -19,14 +19,11 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var pairCounter: UILabel!
     
-    let colours: [UIColor] = [
-        .red, .red, .blue, .blue, .green, .green, .yellow, .yellow, .purple, .purple, .orange, .orange
+    let emojis = [
+        "🚌", "🚌", "🚗", "🚗", "✈️", "✈️", "🚁", "🚁", "🚄", "🚄", "🚃", "🚃"
     ]
     
-    var isFlipped = false
     var flippedBtns: [Int] = []
-    var currColour: UIColor = UIColor.systemGray5
-    var prevColour: UIColor = UIColor.systemGray5
     var pairCount: Int = 0 {
         didSet { pairCounter.text = "\(pairCount)" }
     }
@@ -52,17 +49,15 @@ class ViewController: UIViewController {
             let firstBtnIndex = flippedBtns[0]
             let secondBtnIndex = flippedBtns[1]
             
-            let firstColor = BtnList[firstBtnIndex].tintColor
-            let secondColor = BtnList[secondBtnIndex].tintColor
-            
-            if firstColor == secondColor {
+            let firstEmoji = BtnList[firstBtnIndex].currentTitle ?? ""
+            let secondEmoji = BtnList[secondBtnIndex].currentTitle ?? ""
+
+            if firstEmoji == secondEmoji {
                 pairCount += 1
-                game.buttons[firstBtnIndex].isFlipped = true
-                game.buttons[secondBtnIndex].isFlipped = true
             } else {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    self.game.buttons[firstBtnIndex].isBtnWhite = true
-                    self.game.buttons[secondBtnIndex].isBtnWhite = true
+                    self.game.buttons[firstBtnIndex].toggleFlip()
+                    self.game.buttons[secondBtnIndex].toggleFlip()
                     self.updateViewFromModel()
                 }
             }
@@ -78,9 +73,7 @@ class ViewController: UIViewController {
             btn.backgroundColor = UIColor.systemGray5
             btn.isUserInteractionEnabled = true
             game.buttons[index].isFlipped = false
-            game.buttons[index].isBtnWhite = true
         }
-        isFlipped = false
         flippedBtns.removeAll()
         pairCount = 0
         shuffleBtnColours()
@@ -89,10 +82,12 @@ class ViewController: UIViewController {
     }
    
     func shuffleBtnColours() {
-        let shuffledColours = colours.shuffled()
+        let shuffledEmojis = emojis.shuffled()
 
         for (index, button) in BtnList.enumerated() {
-            button.tintColor = shuffledColours[index]
+            button.setTitle(shuffledEmojis[index], for: .normal)
+            button.setTitleColor(.clear, for: .normal)
+            button.setTitleColor(.black, for: .disabled)
         }
     }
     
@@ -101,14 +96,7 @@ class ViewController: UIViewController {
             let button = BtnList[index]
             let btn = game.buttons[index]
             
-            if btn.isFlipped {
-                button.backgroundColor = button.tintColor
-                button.isUserInteractionEnabled = false
-            } else if btn.isBtnWhite {
-                button.backgroundColor = UIColor.systemGray5
-            } else {
-                button.backgroundColor = button.tintColor
-            }
+            btn.isFlipped ? (button.isEnabled = false) : (button.isEnabled = true)
        }
     }
     
