@@ -42,6 +42,17 @@ class ViewController: UIViewController {
         
         if game.buttons[btnIndex].isFlipped || flippedBtns.contains(btnIndex) { return }
         
+        UIView.transition(
+            with: sender,
+            duration: 0.4,
+            options: .transitionFlipFromLeft,
+            animations: {
+                sender.setTitleColor(.black, for: .disabled)
+                sender.configuration?.background.backgroundColor = .systemGray5
+            },
+            completion: nil
+        )
+        
         flippedBtns.append(btnIndex)
         game.chooseBtn(at: btnIndex)
         
@@ -56,6 +67,14 @@ class ViewController: UIViewController {
                 pairCount += 1
             } else {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    UIView.transition(with: self.BtnList[firstBtnIndex], duration: 0.4, options: .transitionFlipFromRight, animations: {
+                        self.BtnList[firstBtnIndex].setTitleColor(.clear, for: .normal)
+                        self.BtnList[firstBtnIndex].configuration?.background.backgroundColor = .systemTeal
+                    }, completion: nil)
+                    UIView.transition(with: self.BtnList[secondBtnIndex], duration: 0.4, options: .transitionFlipFromRight, animations: {
+                        self.BtnList[secondBtnIndex].setTitleColor(.clear, for: .normal)
+                        self.BtnList[secondBtnIndex].configuration?.background.backgroundColor = .systemTeal
+                    }, completion: nil)
                     self.game.buttons[firstBtnIndex].toggleFlip()
                     self.game.buttons[secondBtnIndex].toggleFlip()
                     self.updateViewFromModel()
@@ -70,7 +89,12 @@ class ViewController: UIViewController {
     
     @IBAction func reset(_ sender: UIButton) {
         for (index, btn) in BtnList.enumerated() {
-            btn.backgroundColor = UIColor.systemGray5
+            if game.buttons[index].isFlipped {
+                UIView.transition(with: btn, duration: 0.4, options: .transitionFlipFromRight, animations: {
+                    btn.configuration?.background.backgroundColor = .systemTeal
+                }, completion: nil)
+                //            btn.configuration?.background.backgroundColor = UIColor.systemTeal
+            }
             btn.isUserInteractionEnabled = true
             game.buttons[index].isFlipped = false
         }
@@ -87,7 +111,7 @@ class ViewController: UIViewController {
         for (index, button) in BtnList.enumerated() {
             button.setTitle(shuffledEmojis[index], for: .normal)
             button.setTitleColor(.clear, for: .normal)
-            button.setTitleColor(.black, for: .disabled)
+//            button.setTitleColor(.black, for: .disabled)
         }
     }
     
